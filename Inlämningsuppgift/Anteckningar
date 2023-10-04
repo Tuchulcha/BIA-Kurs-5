@@ -1,0 +1,77 @@
+
+
+Företag: Distans IT konsultföretag 
+Målbeskrivning: Företaget är i en expansiv fas och överväger bästa sättet att öka sin talangpool. Jag har fått i uppdrag att uforska löneläget för datascientists
+
+Hypotes: Utvecklare som har hög Quality of Life index och Hög relativ köpkraft kommer vara bättre. Hitta inversa relationen mellan det och utvecklarlöner så kommer du få landet där det är bäst att sätta upp kontor/anställa på plats med distansföretag. Dvs. Hög QOL, Hög LPP, bättre än average lön för landet och låg lön.
+Utvecklande av hypotes: Inget säger att ett internationellt företag måste begränsa sig till att betala lokala löner. Fokusera på QOLI och låga löner så är du i mål, betala bara mer än vad som är bra lokalt och du kommer fortfarande billigt undan.
+
+Data som behövs:
+[x]Behöver data om lön 
+[x]Skatt på lön (alternativt snittlön i landet + matematik för att se hur bra lönen är relativt)
+[x]Vad snittlönen är per land
+[x]Cost of Living Index, Local Purchasing Power Index
+
+Tankar om [[Kåserier Data Science Salary 2021-2023]] 
+Jag jobbade på samma ide här: [[Övningsuppgift-K5 Designa Datavisualisering]]
+
+Redogör för hur du rensat och transfomerat data:
+	[[ETL DSS IU-K5]], [[ETL COLI IU-K5]], [[ETL QOLI IU-K5]], [[ETL AAW IU-K5]], [[ETL AAW IU-K5]]
+Jag har använt fem olika dataset. Ett för löner, ett för Quality of Life, ett för Cost of Living, ett för snittlöner i olika länder och ett för taxering på lön i olika länder.
+Alla har fått en is_in_all_datasets och en in_coli_and_qoli för att kunna filtrera visualiseringar i PBI
+Alla har fått country_ISO.
+Jag har gjort några kalkylerade kolumner i PBI 
+och en drös med measures.
+
+Redogör för dina beslut: 
+	Använder average salary för grupperingar, ex titel, experience, location över perioden för att få en ungefärbild av läget.
+	En låg lön är bra. En låg COLI är bra
+		[x] Gör en COLI modifierad lönekolumn lön/coli
+	
+
+Redogör för begränsningar:
+	Jag vill göra något intressant, men fokus är på visualiseringarna. För att inte fastna i data komplexiteten jobbar jag "fast and loose" med data för att få något som går att bearbeta visuellt. Dvs gör antaganden utan att gå på djupet. Exempel: Taxes täcker inte in progressiv taxering rätt. "Tax wedge", eller hur många procent av inkomst som går till skatt, är baserat på någon som tjänar 67% av normallönen för det landet. Funkar dåligt i praktiken när lönen är mer än snittlönen för landet.
+	Data är en snapshot. COLI är för 2022, DSS är för 2021-2023. QOLI är för 2020, AvgWages blandade år, data är alltså "historielöst", det går inte att resa i tiden det senaste värdet är inte alltid för samma år, alla värden är senaste som gick att hitta.
+	All data finns inte för alla länder. 70 länder i DSS finns bara där. 35 länder finns i alla set.
+	Det finns typ ingen data om lönen i något land utanför USA. Om man skelar med flit går det att inkludera UK på 150 rader och skelar man lite till får Canada vara med på 82. Det finns 13 länder med tio eller fler rader av lönedata. USA har 1744 rader.
+	Det finns inget i data om utbudet av data scientists i varje land, en ganska viktig detalj om man vill anställa några.
+	
+
+Nivåer av analys:
+	QOLI, COLI, DSS - vilka länder finns med i alla?
+	Q,C, - Kan det göras något med bara det här? Kanske med AvgSalary(trist antal lände på den dock)
+
+Saker jag vill skapa:
+	Kompositsiffra: LPPI+COLI
+	Kompositsiffra: LPPI+COLI+QOLI+#ofAvgSalaries
+		Notera att COLI är omvänd, för att hög COLI är dåligt. Kompositsiffran är gjord genom att normalisera de fyra värdena. Sen gångras varje värde med en "vikt" och alla normaliserade viktmultiplicerade värden adderas. Jag hade en förhoppning om att kunna göra så att Jag har också implementerat att användaren själv ska kunna förändra vikterna. Men det är svårt att ha logik av typen som stoppar användaren från att göra så att summan av alla vikter överstiger 1, och det är meckigt. På kluddbladen kan du leka med att justera vikterna själv, men jag valde att inte använda det i presentationen. Där är vikterna satta till 0.2 för alla utom Quality of life som är dominant på 0.4
+	i DSS: hur många avg salary lönen motsvarar i landet.
+
+Saker jag vill se visualiserade:
+	Hur DS lönerna är relativt till snittlönerna i länder
+	Min kompositsiffra per land
+	Lägsta/Högsta DS lönerna per land
+
+To-Do
+	[x] Lägg till ISO kod för länder i alla dataset som används för att kunna skapa relationer
+	I PBI Gör Average på DS löner baserat på titel, experience, country
+	[ x]Om inte Average Wages finns i USD för sitt dataset, använd DSS för att skapa en konverteringsratio // Det finns. Men det finns bara avg salary för 39 länder.
+	[x] en kolumn i varje tabell "finns i alla tabeller" Y/N så att det går att filtrera på dem som har komplettast data.
+	[x]Frikoppla 20 billigaste så den inte drillar eller drillas
+	[x]Gör filtrerade measure för alla intressanta saker du tänker ha i "master table" så att infinity försvinner. Tänk på att inte använda normaliserade värden! (för det är otydligt)
+	[]Länka till github
+
+Vad vill jag göra?
+	Jag vill svara på frågan så utförligt som möjligt. Då borde jag lägga fokus på länderna för vilka all data finns.
+	+ PostTax_Salary, Q, C, LPP,
+
+Noteringar om rapport: I en dynamisk rapport hade jag använd measures för att normalisera. Nu var det lika rätt fram att sortera stigande/fallande och kolla på högsta och lägsta värdet istället för att göra logik som filtrerar så bara MIN/MAX för radet med värden i kolumnen kom med.
+
+Förklaringsblad:
+	Alla löner är i USD.
+	all values used in the composite score have been normalized. COLI was inverted first. vikterna på komposit score är 0.2, 0.2, 0.2, 0.4
+	# = number, ex. # Average Salaries = Number of Average Salaries
+	COLI adjusted salary is salary / coli
+	Low COLI is good
+	High QOLI is good
+	High LPPI is good

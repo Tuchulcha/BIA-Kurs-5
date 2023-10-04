@@ -1,0 +1,36 @@
+DSS - Data Scientist Salary [[ETL DSS IU-K5]]
+Work_Year, PreTax_Salary_USD, Tax, PostTax_Salary_USD, Experience, Title, Country, Country_ISO, Company_Size, PreTax_Salary_Local_Currency, Local_Currency
+[x]Ta bort dubbletter
+[x]Ta bort alla som inte är fulltime (37 rader innan dubblettrensning)
+[x]Ta bort employment_type
+[x]Lägg till Country kolumn baserat på Country_ISO
+[x]Lägg till Tax kolumn från annat dataset
+[]Lägg till PostTax_Salary_USD uträknat på Tax kolumn
+
+
+COLI - Cost of Living Index [[ETL COLI IU-K5]]
+Country, Country_ISO, Cost_of_Living_Index, 
+[x] Gör landsISO kolumn
+
+QOLI - Quality of Life Index
+Country, Country_ISO, Quality_of_Life_Index,
+[x] Gör landsISO kolumn
+
+AAW - Average Annual Wage [[ETL AAW IU-K5]]
+Country, Country_ISO, Average_Salary_USD
+Har reducerat ner AAW till två kolumner, landsISO på två bokstäver och 'Value' som är average salary i USD.
+
+AAW - Average Annual Wages:
+I kolumnen SERIES i finns värdet USDPPP. Det är lönen i dollar
+
+[x]Ta bort alla rader som inte är senaste per Country i USDPPP
+[x]Ta bort Alla kolumner förutom Country, Value
+[x]Lägg till Country-ISO
+
+Taxes:
+
+TOS - Tax on Salary [[ETL TOS IU-K5]]
+Country_ISO, TaxPercentage
+[x] Gör landsISO kolumn
+
+Tabellerna kan ha fler kolumner kvar, bara dessa finns är jag nöjd
